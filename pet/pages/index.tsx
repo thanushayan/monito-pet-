@@ -1,115 +1,250 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Banner from '../components/Banner';
+import Catalog from '../components/Catalog';
+import CatalogItem from '../components/Catalog/CatalogItem';
+import Hero from '../components/IndexPage/Hero';
+import Section from '../components/Section';
+import Button from '../components/UI/Button';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+export interface IProductItem {
+  _id: number;
+  SKU: number;
+  image: string;
+  title: string;
+  product: string;
+  size: string;
+  price: number;
+  present: string;
+}
 
-export default function Home() {
+interface HomeProps {
+  dogs: IDogItem[];
+  products: IProductItem[];
+  news: INewsItem[];
+}
+
+import bannerStyle from '../components/Banner/Banner.module.scss';
+import Sellers from '../components/Sellers';
+import News from '../components/News';
+import NewsItem, { INewsItem } from '../components/News/NewsItem';
+import { IDogItem } from '../components/Search';
+
+const Home: NextPage<HomeProps> = ({ dogs, products, news }) => {
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <>
+      <Head>
+        <title>Monito | Pets for Best</title>
+        <meta
+          name="description"
+          content="Having a pet means you have more joy, a new friend, a happy person who will always be with you to have fun. We have 200+ different pets that can meet your needs!"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+        {/* <link rel="icon" href="/favicon.ico" /> */}
+      </Head>
+      <Hero />
+      <Section
+        suptitle="Whats new?"
+        title="Take a look at some of our pets"
+        button={
+          <Button href="/dogs" border>
+            View more{' '}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.8637 6.13633C8.57081 5.84343 8.09594 5.84343 7.80304 6.13633C7.51015 6.42922 7.51015 6.90409 7.80304 7.19699L8.8637 6.13633ZM11.6667 9.99999L12.197 10.5303C12.3377 10.3897 12.4167 10.1989 12.4167 9.99999C12.4167 9.80108 12.3377 9.61031 12.197 9.46966L11.6667 9.99999ZM7.80304 12.803C7.51015 13.0959 7.51015 13.5708 7.80304 13.8637C8.09594 14.1565 8.57081 14.1565 8.8637 13.8637L7.80304 12.803ZM7.80304 7.19699L11.1364 10.5303L12.197 9.46966L8.8637 6.13633L7.80304 7.19699ZM11.1364 9.46966L7.80304 12.803L8.8637 13.8637L12.197 10.5303L11.1364 9.46966Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+        }
+      >
+        <Catalog>
+          {dogs.map((dog) => (
+            <CatalogItem
+              key={dog._id}
+              category="dogs"
+              SKU={dog.SKU}
+              image={dog.images[0]}
+              title={dog.title}
+              price={dog.price}
+              description={[
+                ['Gene', dog.gene],
+                ['Age', dog.age],
+              ]}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          ))}
+        </Catalog>
+      </Section>
+      <Banner background="url('/static/img/317/01.png'), #003459" right>
+        <h1>One more friend</h1>
+        <h2>Thousands more fun!</h2>
+        <p>
+          Having a pet means you have more joy, a new friend, a happy person who
+          will always be with you to have fun. We have 200+ different pets that
+          can meet your needs!
+        </p>
+        <div className={`${bannerStyle.buttonsRow}`}>
+          <Button border>
+            View Intro{' '}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 9V15L15 12L10 9Z" fill="#003459" />
+              <path
+                d="M10 9L10.3859 8.35688C10.1542 8.21786 9.86561 8.21422 9.63048 8.34735C9.39534 8.48048 9.25 8.7298 9.25 9H10ZM10 15H9.25C9.25 15.2702 9.39534 15.5195 9.63048 15.6526C9.86561 15.7858 10.1542 15.7821 10.3859 15.6431L10 15ZM15 12L15.3859 12.6431C15.6118 12.5076 15.75 12.2634 15.75 12C15.75 11.7366 15.6118 11.4924 15.3859 11.3569L15 12ZM12 20.25C7.44365 20.25 3.75 16.5563 3.75 12H2.25C2.25 17.3848 6.61522 21.75 12 21.75V20.25ZM3.75 12C3.75 7.44365 7.44365 3.75 12 3.75V2.25C6.61522 2.25 2.25 6.61522 2.25 12H3.75ZM12 3.75C16.5563 3.75 20.25 7.44365 20.25 12H21.75C21.75 6.61522 17.3848 2.25 12 2.25V3.75ZM20.25 12C20.25 16.5563 16.5563 20.25 12 20.25V21.75C17.3848 21.75 21.75 17.3848 21.75 12H20.25ZM9.25 9V15H10.75V9H9.25ZM10.3859 15.6431L15.3859 12.6431L14.6141 11.3569L9.61413 14.3569L10.3859 15.6431ZM15.3859 11.3569L10.3859 8.35688L9.61413 9.64312L14.6141 12.6431L15.3859 11.3569Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+          <Button href="/dogs">Explore Now</Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </Banner>
+      <Section
+        suptitle="Hard to choose right products for your pets?"
+        title="Our Products"
+        button={
+          <Button border>
+            View more{' '}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.8637 6.13633C8.57081 5.84343 8.09594 5.84343 7.80304 6.13633C7.51015 6.42922 7.51015 6.90409 7.80304 7.19699L8.8637 6.13633ZM11.6667 9.99999L12.197 10.5303C12.3377 10.3897 12.4167 10.1989 12.4167 9.99999C12.4167 9.80108 12.3377 9.61031 12.197 9.46966L11.6667 9.99999ZM7.80304 12.803C7.51015 13.0959 7.51015 13.5708 7.80304 13.8637C8.09594 14.1565 8.57081 14.1565 8.8637 13.8637L7.80304 12.803ZM7.80304 7.19699L11.1364 10.5303L12.197 9.46966L8.8637 6.13633L7.80304 7.19699ZM11.1364 9.46966L7.80304 12.803L8.8637 13.8637L12.197 10.5303L11.1364 9.46966Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+        }
+      >
+        <Catalog>
+          {products.map((product) => (
+            <CatalogItem
+              key={product._id}
+              category="products"
+              SKU={product.SKU}
+              image={product.image}
+              title={product.title}
+              description={[
+                ['Product', product.product],
+                ['Size', product.size || ''],
+              ]}
+              price={product.price}
+              present={product.present}
+            />
+          ))}
+        </Catalog>
+      </Section>
+      <Section
+        title="Proud to be part of Pet Sellers"
+        button={
+          <Button border>
+            View all our sellers{' '}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.8637 6.13633C8.57081 5.84343 8.09594 5.84343 7.80304 6.13633C7.51015 6.42922 7.51015 6.90409 7.80304 7.19699L8.8637 6.13633ZM11.6667 9.99999L12.197 10.5303C12.3377 10.3897 12.4167 10.1989 12.4167 9.99999C12.4167 9.80108 12.3377 9.61031 12.197 9.46966L11.6667 9.99999ZM7.80304 12.803C7.51015 13.0959 7.51015 13.5708 7.80304 13.8637C8.09594 14.1565 8.57081 14.1565 8.8637 13.8637L7.80304 12.803ZM7.80304 7.19699L11.1364 10.5303L12.197 9.46966L8.8637 6.13633L7.80304 7.19699ZM11.1364 9.46966L7.80304 12.803L8.8637 13.8637L12.197 10.5303L11.1364 9.46966Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+        }
+      >
+        <Sellers />
+      </Section>
+      <Banner background="url('/static/img/317/02.png'), #FFB775">
+        <h1>
+          Adoption
+          <img src="/static/img/icons/paw-icon.svg" alt="" />
+        </h1>
+        <h2>Thousands more fun!</h2>
+        <p>
+          Having a pet means you have more joy, a new friend, a happy person who
+          will always be with you to have fun. We have 200+ different pets that
+          can meet your needs!
+        </p>
+        <div className={`${bannerStyle.buttonsRow}`}>
+          <Button border>
+            View Intro{' '}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 9V15L15 12L10 9Z" fill="#003459" />
+              <path
+                d="M10 9L10.3859 8.35688C10.1542 8.21786 9.86561 8.21422 9.63048 8.34735C9.39534 8.48048 9.25 8.7298 9.25 9H10ZM10 15H9.25C9.25 15.2702 9.39534 15.5195 9.63048 15.6526C9.86561 15.7858 10.1542 15.7821 10.3859 15.6431L10 15ZM15 12L15.3859 12.6431C15.6118 12.5076 15.75 12.2634 15.75 12C15.75 11.7366 15.6118 11.4924 15.3859 11.3569L15 12ZM12 20.25C7.44365 20.25 3.75 16.5563 3.75 12H2.25C2.25 17.3848 6.61522 21.75 12 21.75V20.25ZM3.75 12C3.75 7.44365 7.44365 3.75 12 3.75V2.25C6.61522 2.25 2.25 6.61522 2.25 12H3.75ZM12 3.75C16.5563 3.75 20.25 7.44365 20.25 12H21.75C21.75 6.61522 17.3848 2.25 12 2.25V3.75ZM20.25 12C20.25 16.5563 16.5563 20.25 12 20.25V21.75C17.3848 21.75 21.75 17.3848 21.75 12H20.25ZM9.25 9V15H10.75V9H9.25ZM10.3859 15.6431L15.3859 12.6431L14.6141 11.3569L9.61413 14.3569L10.3859 15.6431ZM15.3859 11.3569L10.3859 8.35688L9.61413 9.64312L14.6141 12.6431L15.3859 11.3569Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+          <Button href="/dogs">Explore Now</Button>
+        </div>
+      </Banner>
+      <Section
+        suptitle="You already know ?"
+        title="Useful pet knowledge"
+        button={
+          <Button border>
+            View more{' '}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.8637 6.13633C8.57081 5.84343 8.09594 5.84343 7.80304 6.13633C7.51015 6.42922 7.51015 6.90409 7.80304 7.19699L8.8637 6.13633ZM11.6667 9.99999L12.197 10.5303C12.3377 10.3897 12.4167 10.1989 12.4167 9.99999C12.4167 9.80108 12.3377 9.61031 12.197 9.46966L11.6667 9.99999ZM7.80304 12.803C7.51015 13.0959 7.51015 13.5708 7.80304 13.8637C8.09594 14.1565 8.57081 14.1565 8.8637 13.8637L7.80304 12.803ZM7.80304 7.19699L11.1364 10.5303L12.197 9.46966L8.8637 6.13633L7.80304 7.19699ZM11.1364 9.46966L7.80304 12.803L8.8637 13.8637L12.197 10.5303L11.1364 9.46966Z"
+                fill="#003459"
+              />
+            </svg>
+          </Button>
+        }
+      >
+        <News>
+          {news.map((item) => (
+            <NewsItem key={item._id} {...item} />
+          ))}
+        </News>
+      </Section>
+    </>
   );
+};
+
+export default Home;
+
+export async function getStaticProps() {
+  const dogs = await fetch(
+    'https://6358307cc26aac906f3dda7a.mockapi.io/dogs?page=1&limit=8'
+  ).then((res) => res.json());
+
+  const products = await fetch(
+    'https://6358307cc26aac906f3dda7a.mockapi.io/products?page=1&limit=8'
+  ).then((res) => res.json());
+
+  const news = await fetch(
+    'https://6358307cc26aac906f3dda7a.mockapi.io/news?page=1&limit=3'
+  ).then((res) => res.json());
+
+  return { props: { dogs: dogs, products: products, news: news } };
 }
